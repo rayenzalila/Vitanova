@@ -1,0 +1,14 @@
+# Database credentials & sensitive config
+includes/db.php
+
+# Database files
+database/setup.php
+*.sql
+
+# XAMPP / system files
+.DS_Store
+Thumbs.db
+
+# PHP error logs
+*.log
+error_log
