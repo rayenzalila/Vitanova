@@ -3,12 +3,12 @@
 
 <footer class="footer" role="contentinfo">
   <div class="container">
-    <div class="footer__grid">
+    <div class="footer__grid text-center-mobile">
 
       <div>
         <div class="footer__logo"><span>Vita</span><span class="nova">nova</span></div>
         <p class="footer__tagline">Des compléments alimentaires naturels et bio pour retrouver votre équilibre. Formulés avec soin, certifiés pour votre bien-être.</p>
-        <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+        <div class="flex-center-mobile" style="display:flex;gap:.75rem;margin-top:1.25rem">
           <a href="#" aria-label="Instagram" style="color:rgba(255,255,255,.7);transition:color .3s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/>
@@ -39,10 +39,9 @@
       <div class="footer__contact">
         <h4>Contact</h4>
         <p>
-          📍 12 Rue des Plantes Naturelles<br>
-          75015 Paris, France<br><br>
-          📧 <a href="mailto:contact@vitanova.fr" style="color:rgba(255,255,255,.8)">contact@vitanova.fr</a><br>
-          📞 <a href="tel:+33123456789" style="color:rgba(255,255,255,.8)">+33 1 23 45 67 89</a><br><br>
+          📍 Polytechnique, Sousse<br><br>
+          📧 <a href="mailto:rayenzalila@gmail.com" style="color:rgba(255,255,255,.8)">rayenzalila@gmail.com</a><br>
+          📞 <a href="tel:+21628196949" style="color:rgba(255,255,255,.8)">+216 28 196 949</a><br><br>
           🕐 Lun–Ven : 9h–18h
         </p>
       </div>
@@ -50,10 +49,16 @@
     </div>
 
     <div class="footer__bottom">
-      <p>© <?= date('Y') ?> Vitanova. Tous droits réservés. &nbsp;|&nbsp;
-        <a href="#" style="color:rgba(255,255,255,.5)">Mentions légales</a> &nbsp;|&nbsp;
-        <a href="#" style="color:rgba(255,255,255,.5)">Politique de confidentialité</a>
-      </p>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem">
+        <p>© <?= date('Y') ?> Vitanova. Tous droits réservés. &nbsp;|&nbsp;
+          <a href="#" style="color:rgba(255,255,255,.5)">Mentions légales</a> &nbsp;|&nbsp;
+          <a href="#" style="color:rgba(255,255,255,.5)">Politique de confidentialité</a>
+        </p>
+        <div class="footer-signature">
+          <img src="images/White%20Minimalist%20Handwritten%20Signature%20Typography%20Logo%20(500%20x%20300%20px)%20(1).png" class="sig-black" alt="Signature" style="height:80px;width:auto">
+          <img src="images/White%20Minimalist%20Handwritten%20Signature%20Typography%20Logo%20(500%20x%20300%20px).png" class="sig-white" alt="Signature" style="height:80px;width:auto">
+        </div>
+      </div>
     </div>
   </div>
 </footer>
@@ -63,6 +68,7 @@
 <script src="<?= BASE_URL ?>/assets/js/cart.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/validation.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/main.js"></script>
+
 <?php if (isset($extraScripts)) echo $extraScripts; ?>
 </body>
 </html>

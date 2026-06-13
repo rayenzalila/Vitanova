@@ -14,9 +14,9 @@ $success = false; $errors = [];
 </script>
 <div class="page-header"><div class="container"><h1>Contactez-nous</h1><p style="color:var(--clr-muted);margin-top:.5rem">Notre équipe vous répond sous 24h.</p></div></div>
 
-<section class="section-sm" style="background:#fff">
+<section class="section-sm" style="background:var(--clr-bg)">
 <div class="container" style="max-width:960px">
-  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:3rem">
+  <div class="grid-responsive-2" style="grid-template-columns:1.4fr 1fr;gap:3rem">
 
     <div class="card">
       <h2 style="font-size:1.2rem;margin-bottom:1.5rem">Envoyer un message</h2>
@@ -56,12 +56,13 @@ $success = false; $errors = [];
 
     <div style="display:flex;flex-direction:column;gap:1.25rem">
       <?php foreach([
-        ['📍','Adresse','12 Rue des Plantes Naturelles<br>75015 Paris, France'],
+        ['📍','Adresse','Polytechnique, Sousse'],
         ['📧','Email','<a href="mailto:rayenzalila@gmail.com" style="color:var(--clr-primary)">rayenzalila@gmail.com</a>'],
-        ['📞','Téléphone','<a href="tel:+33123456789" style="color:var(--clr-primary)">+33 1 23 45 67 89</a>'],
+        ['📞','Téléphone','<a href="tel:+21628196949" style="color:var(--clr-primary)">+216 28 196 949</a>'],
         ['🕐','Horaires','Lun – Ven : 9h – 18h<br>Sam – Dim : Fermé'],
       ] as $info): ?>
-      <div class="card" style="display:flex;gap:1rem;align-items:flex-start">
+      <div class="card text-center-mobile" style="display:flex;gap:1rem;align-items:flex-start">
+        <style>@media(max-width:768px){ .card.text-center-mobile { flex-direction: column; align-items: center !important; } }</style>
         <span style="font-size:1.5rem"><?= $info[0] ?></span>
         <div>
           <h4 style="font-size:.85rem;color:var(--clr-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem"><?= $info[1] ?></h4>

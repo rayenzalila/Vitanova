@@ -40,11 +40,28 @@ $categories = [
   </div>
 </div>
 
-<section class="section-sm" style="background:#fff">
+<!-- Featured Boutique Banner — standalone, outside page-header -->
+<div style="padding:2rem 1.5rem 0;">
+  <div class="container">
+    <div class="reveal" style="border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-lg);">
+      <img src="images/Vitanova.jpg" alt="Vitanova — La Nature en Action"
+           style="width:100%; height:auto; display:block;">
+    </div>
+  </div>
+</div>
+
+<section class="section-sm">
+
   <div class="container">
 
     <!-- Filtres -->
-    <form method="GET" id="filter-form" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:2.5rem;padding:1.25rem;background:var(--clr-surface);border-radius:var(--radius-lg);border:1px solid var(--clr-border)">
+    <form method="GET" id="filter-form" class="text-center-mobile" style="display:grid;grid-template-columns:1fr auto auto auto;gap:1rem;margin-bottom:2.5rem;padding:1.25rem;background:var(--clr-surface);border-radius:var(--radius-lg);border:1px solid var(--clr-border); transition: background 0.3s ease, border-color 0.3s ease;">
+      <style>
+        @media(max-width:768px) {
+          #filter-form { grid-template-columns: 1fr !important; }
+          #filter-form select, #filter-form button { width: 100% !important; max-width: none !important; }
+        }
+      </style>
       <div style="flex:1;min-width:200px">
         <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Rechercher un produit..." class="form-control" style="margin:0">
       </div>
@@ -82,7 +99,7 @@ $categories = [
       <?php foreach ($products as $i => $p): ?>
       <article class="product-card reveal reveal-delay-<?= ($i % 3) + 1 ?>">
         <a href="produit.php?id=<?= $p['id'] ?>" class="product-card__img" style="display:block">
-          <?= productSvgPlaceholder($p['name'], $p['category']) ?>
+          <?= renderProductImage($p) ?>
         </a>
         <div class="product-card__body">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem">
@@ -98,13 +115,14 @@ $categories = [
           <div class="product-card__footer">
             <span class="product-card__price"><?= formatPrice($p['price']) ?></span>
             <?php if ($p['stock'] > 0): ?>
-            <button class="btn btn-primary btn-sm" data-add-to-cart
+            <button type="button" class="btn btn-primary btn-sm" data-add-to-cart
               data-product-id="<?= $p['id'] ?>"
               data-product-name="<?= htmlspecialchars($p['name'], ENT_QUOTES) ?>"
               data-product-price="<?= $p['price'] ?>"
               data-product-category="<?= $p['category'] ?>"
               data-product-slug="<?= $p['slug'] ?>"
-              data-product-stock="<?= $p['stock'] ?>">
+              data-product-stock="<?= $p['stock'] ?>"
+              data-product-image="<?= htmlspecialchars(productImageUrl($p)) ?>">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Panier
             </button>

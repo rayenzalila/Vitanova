@@ -38,10 +38,15 @@ function requireAdmin(): void
         require_once __DIR__ . '/messages.php';
         http_response_code(403);
         die('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Accès refusé — Vitanova</title>
-        <style>body{font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f7fdf9;margin:0}
-        .box{text-align:center;padding:3rem;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(15,110,86,.08);max-width:400px}
-        h1{color:#a32d2d;font-size:2rem;margin-bottom:1rem}p{color:#4a5568}
-        a{color:#0f6e56;font-weight:600;text-decoration:none}</style></head>
+        <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);</script>
+        <style>
+          :root { --bg: #f7fdf9; --card: #fff; --text: #4a5568; --primary: #0f6e56; --error: #a32d2d; }
+          [data-theme="dark"] { --bg: #020617; --card: #0f172a; --text: #94a3b8; --primary: #10b981; --error: #fb7185; }
+          body{font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);margin:0;color:var(--text)}
+          .box{text-align:center;padding:3rem;background:var(--card);border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.1);max-width:400px;border:1px solid rgba(255,255,255,.05)}
+          h1{color:var(--error);font-size:2rem;margin-bottom:1rem}
+          a{color:var(--primary);font-weight:600;text-decoration:none}
+        </style></head>
         <body><div class="box"><h1>403</h1><p>' . MSG_ADMIN_UNAUTHORIZED . '</p>
         <a href="' . (defined('BASE_URL') ? BASE_URL : '') . '/">← Retour à l\'accueil</a></div></body></html>');
     }
@@ -108,6 +113,7 @@ function loginUser(array $user): void
     $_SESSION['user_name']  = $user['name'];
     $_SESSION['user_email'] = $user['email'];
     $_SESSION['user_role']  = $user['role'];
+    $_SESSION['tab_id']     = bin2hex(random_bytes(16)); // Unique ID for this tab session
 }
 
 function logoutUser(): void

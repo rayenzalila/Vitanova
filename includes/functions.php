@@ -127,6 +127,31 @@ function productSvgDataUrl(string $name, string $category = ''): string
     return 'data:image/svg+xml;charset=utf-8,' . rawurlencode($svg);
 }
 
+/**
+ * Renders a product image tag, or falls back to the SVG placeholder.
+ * @param array  $product  The product row from the DB (needs 'image_url', 'name', 'category').
+ * @param string $style    Optional inline CSS for the <img> or the SVG wrapper.
+ */
+function renderProductImage(array $product, string $style = 'width:100%;height:100%;object-fit:cover;display:block;'): string
+{
+    if (!empty($product['image_url'])) {
+        $url = BASE_URL . '/assets/img/products/' . htmlspecialchars($product['image_url']);
+        return '<img src="' . $url . '" alt="' . htmlspecialchars($product['name']) . '" style="' . $style . '" loading="lazy">';
+    }
+    return productSvgPlaceholder($product['name'], $product['category'] ?? '');
+}
+
+/**
+ * Returns the absolute URL for a product image (for JS data attributes).
+ */
+function productImageUrl(array $product): string
+{
+    if (!empty($product['image_url'])) {
+        return BASE_URL . '/assets/img/products/' . rawurlencode($product['image_url']);
+    }
+    return '';
+}
+
 // ============================================================
 // Étoiles de notation
 // ============================================================

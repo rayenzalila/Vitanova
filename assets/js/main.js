@@ -27,18 +27,31 @@ window.showToast = showToast;
 // ── Navbar scroll ──────────────────────────────────────
 const navbar = document.querySelector('.navbar');
 if (navbar) {
-  const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 60);
+  const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 20);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 }
 
-// ── Parallax hero ──────────────────────────────────────
-const parallaxBg = document.querySelector('.parallax-bg');
-if (parallaxBg) {
-  window.addEventListener('scroll', () => {
-    parallaxBg.style.transform = `translateY(${window.scrollY * 0.3}px)`;
-  }, { passive: true });
-}
+// ── Parallax Effects ───────────────────────────────────
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  
+  // Parallax Arrière-plan
+  const parallaxBg = document.querySelector('.parallax-bg');
+  if (parallaxBg) parallaxBg.style.transform = `translateY(${y * 0.3}px)`;
+  
+  // Motifs Botaniques
+  const botanical = document.querySelector('.botanical-pattern');
+  if (botanical) botanical.style.transform = `translateY(${y * -0.15}px)`;
+  
+  // Éléments Parallax Génériques (ex: Image Hero)
+  document.querySelectorAll('.parallax-element').forEach(el => {
+    const speed = el.dataset.speed || 0.1;
+    if (window.innerWidth > 992) {
+      el.style.transform = `translateY(${y * speed}px)`;
+    }
+  });
+}, { passive: true });
 
 // ── Scroll reveal ──────────────────────────────────────
 const revealObserver = new IntersectionObserver((entries) => {
@@ -122,3 +135,21 @@ document.querySelectorAll('.stars[data-interactive="true"]').forEach(starsContai
   // Initial state setup
   updateStars();
 });
+
+
+// ── Theme Toggle ───────────────────────────────────────
+const themeToggle = document.getElementById('theme-toggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Dispatch custom event for Chart.js updates if needed
+    window.dispatchEvent(new CustomEvent('themechanged', { detail: newTheme }));
+  });
+}
+
+

@@ -37,7 +37,7 @@ $pageDesc  = htmlspecialchars($p['short_description']);
 
 <div style="margin-top:var(--nav-h)"></div>
 
-<section class="section" style="background:#fff">
+<section class="section" style="background:var(--clr-bg)">
   <div class="container">
     <!-- Fil d'Ariane -->
     <nav style="font-size:.85rem;color:var(--clr-muted);margin-bottom:2rem" aria-label="Fil d'Ariane">
@@ -47,11 +47,44 @@ $pageDesc  = htmlspecialchars($p['short_description']);
     </nav>
 
     <!-- Produit principal -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
+    <div class="grid-responsive-2" style="grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start">
+      <style>
+        .product-img-wrapper {
+          position: sticky;
+          top: calc(var(--nav-h) + 1.5rem);
+          z-index: 10;
+        }
+        .product-img-box {
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          background: var(--clr-surface);
+          border: 1px solid var(--clr-border);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .product-img-box > img, .product-img-box > svg {
+          width: 100% !important;
+          height: 380px !important;
+          display: block !important;
+          object-fit: cover !important;
+          object-position: center !important;
+        }
+        @media(max-width:992px) {
+          .grid-responsive-2 { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+          .product-img-wrapper { 
+            position: relative !important; /* Disables sticky on mobile */
+            top: 0 !important;
+            z-index: 1;
+            margin-bottom: 1rem;
+          }
+          .product-img-box > img, .product-img-box > svg {
+            height: 280px !important; /* Smaller, perfect proportion for mobile */
+          }
+        }
+      </style>
       <!-- Image -->
-      <div style="position:sticky;top:calc(var(--nav-h) + 1rem)">
-        <div style="border-radius:var(--radius-lg);overflow:hidden;background:var(--clr-surface);border:1px solid var(--clr-border)">
-          <?= productSvgPlaceholder($p['name'], $p['category']) ?>
+      <div class="product-img-wrapper">
+        <div class="product-img-box">
+          <?= renderProductImage($p) ?>
         </div>
       </div>
 
@@ -73,10 +106,10 @@ $pageDesc  = htmlspecialchars($p['short_description']);
         <!-- Quantité -->
         <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
           <span style="font-weight:600;font-size:.9rem">Quantité :</span>
-          <div style="display:flex;align-items:center;border:1.5px solid var(--clr-border);border-radius:var(--radius-md);overflow:hidden">
-            <button id="qty-minus" style="padding:.6rem 1rem;border:none;background:var(--clr-surface);cursor:pointer;font-size:1.1rem;color:var(--clr-primary)" aria-label="Diminuer">−</button>
-            <input id="qty-input" type="number" value="1" min="1" max="<?= $p['stock'] ?>" style="width:50px;text-align:center;border:none;font-weight:600;font-size:1rem;outline:none;padding:.6rem 0" aria-label="Quantité">
-            <button id="qty-plus" style="padding:.6rem 1rem;border:none;background:var(--clr-surface);cursor:pointer;font-size:1.1rem;color:var(--clr-primary)" aria-label="Augmenter">+</button>
+          <div style="display:flex;align-items:center;border:1.5px solid var(--clr-border);border-radius:var(--radius-md);overflow:hidden;background:var(--clr-surface)">
+            <button id="qty-minus" style="padding:.6rem 1rem;border:none;background:transparent;cursor:pointer;font-size:1.1rem;color:var(--clr-primary)" aria-label="Diminuer">−</button>
+            <input id="qty-input" type="number" value="1" min="1" max="<?= $p['stock'] ?>" style="width:50px;text-align:center;border:none;background:transparent;color:var(--text);font-weight:600;font-size:1rem;outline:none;padding:.6rem 0" aria-label="Quantité">
+            <button id="qty-plus" style="padding:.6rem 1rem;border:none;background:transparent;cursor:pointer;font-size:1.1rem;color:var(--clr-primary)" aria-label="Augmenter">+</button>
           </div>
           <span style="font-size:.85rem;color:var(--clr-muted)">Stock : <?= $p['stock'] ?></span>
         </div>
@@ -89,6 +122,7 @@ $pageDesc  = htmlspecialchars($p['short_description']);
           data-product-category="<?= $p['category'] ?>"
           data-product-slug="<?= $p['slug'] ?>"
           data-product-stock="<?= $p['stock'] ?>"
+          data-product-image="<?= htmlspecialchars(productImageUrl($p)) ?>"
           style="margin-bottom:1rem">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
@@ -110,7 +144,8 @@ $pageDesc  = htmlspecialchars($p['short_description']);
 
     <!-- Tabs -->
     <div class="tabs" style="margin-top:4rem">
-      <div style="display:flex;gap:0;border-bottom:2px solid var(--clr-border);margin-bottom:2rem">
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--clr-border);margin-bottom:2rem;overflow-x:auto;white-space:nowrap;scrollbar-width:none">
+        <style>.tabs div::-webkit-scrollbar { display: none; }</style>
         <?php foreach(['Description','Ingrédients','Avis clients (' . count($reviews) . ')'] as $i => $tab): ?>
         <button class="tab-btn" style="padding:.75rem 1.5rem;border:none;background:none;font-weight:600;font-size:.95rem;color:var(--clr-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;<?= $i===0 ? 'color:var(--clr-primary);border-bottom-color:var(--clr-primary)' : '' ?>"
           onmouseover="this.style.color='var(--clr-primary)'" onmouseout="if(!this.classList.contains('active'))this.style.color='var(--clr-muted)'">
@@ -201,7 +236,7 @@ $pageDesc  = htmlspecialchars($p['short_description']);
         <?php foreach ($related as $r): ?>
         <article class="product-card">
           <a href="produit.php?id=<?= $r['id'] ?>" class="product-card__img" style="display:block">
-            <?= productSvgPlaceholder($r['name'], $r['category']) ?>
+            <?= renderProductImage($r) ?>
           </a>
           <div class="product-card__body">
             <h3 class="product-card__name"><a href="produit.php?id=<?= $r['id'] ?>" style="color:inherit"><?= htmlspecialchars($r['name']) ?></a></h3>

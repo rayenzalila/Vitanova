@@ -69,7 +69,7 @@ require_once 'includes/header.php';
   </div>
 </div>
 
-<section class="section-sm" style="background:#fff">
+<section class="section-sm" style="background:var(--clr-bg)">
   <div class="container">
     <?php if (!empty($errors)): ?>
     <div class="alert alert--error" style="max-width:700px;margin-bottom:2rem">

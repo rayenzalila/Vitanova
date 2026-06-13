@@ -1,19 +1,20 @@
 <?php
-// ── Déconnexion — MUST happen before any output ──────────
+// ── Core Imports & Session ──────────
 if (session_status() === PHP_SESSION_NONE) session_start();
+require_once 'includes/db.php';
+require_once 'includes/auth.php';
+require_once 'includes/functions.php';
+require_once 'includes/messages.php';
+
+$errors = []; $successMsg = '';
+
+// ── Déconnexion
 if (($_GET['action'] ?? '') === 'logout') {
-    require_once 'includes/auth.php';
-    require_once 'includes/messages.php';
     logoutUser();
     setFlash('success', MSG_LOGOUT_SUCCESS);
     header('Location: index.php');
     exit;
 }
-
-$pageTitle = 'Mon Compte — Vitanova';
-require_once 'includes/header.php';
-
-$errors = []; $successMsg = '';
 
 // ── CONNEXION
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'login') {
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 $user = $stmt->fetch();
                 if (!$user) $errors[] = MSG_LOGIN_ACCOUNT_NOT_FOUND;
                 elseif (!password_verify($pass, $user['password'])) $errors[] = MSG_LOGIN_WRONG_CREDENTIALS;
-                else { loginUser($user); setFlash('success', MSG_LOGIN_SUCCESS); header('Location: index.php'); exit; }
+                else { loginUser($user); setFlash('success', MSG_LOGIN_SUCCESS); header('Location: index.php?login_success=1'); exit; }
             } catch (Exception $e) { $errors[] = MSG_GENERIC_SERVER_ERROR; }
         }
     }
@@ -68,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     $user->execute([$email]);
                     loginUser($user->fetch());
                     setFlash('success', MSG_REGISTER_SUCCESS);
-                    header('Location: compte.php'); exit;
+                    header('Location: compte.php?login_success=1'); exit;
                 }
             } catch (Exception $e) { $errors[] = MSG_REGISTER_SERVER_ERROR; }
         }
@@ -76,13 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 $user = currentUser();
+$pageTitle = 'Mon Compte — Vitanova';
+require_once 'includes/header.php';
 ?>
+
 
 <div class="page-header"><div class="container">
   <h1><?= $user ? 'Mon Compte' : 'Connexion / Inscription' ?></h1>
 </div></div>
 
-<section class="section-sm" style="background:#fff">
+<section class="section-sm" style="background:var(--clr-bg)">
 <div class="container" style="max-width:900px">
 
 <?php if (!empty($errors)): ?>
@@ -94,10 +98,13 @@ $user = currentUser();
 
 <?php if ($user): ?>
   <!-- DASHBOARD -->
-  <div style="margin-bottom:2rem;display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <h2 style="margin-bottom:.25rem">Bonjour, <?= htmlspecialchars($user['name']) ?> 👋</h2>
-      <p style="color:var(--clr-muted);font-size:.9rem"><?= htmlspecialchars($user['email']) ?></p>
+  <div style="margin-bottom:2rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:1.5rem;flex:1;min-width:300px" class="text-center-mobile">
+      <img src="mascots/Welcome-Back(when%20loging%20in).png" alt="Welcome Mascot" style="height:150px;width:auto;display:block">
+      <div>
+        <h2 style="margin-bottom:.25rem">Bonjour, <?= htmlspecialchars($user['name']) ?> 👋</h2>
+        <p style="color:var(--clr-muted);font-size:.9rem"><?= htmlspecialchars($user['email']) ?></p>
+      </div>
     </div>
     <style>
     @keyframes pulseDanger {
@@ -130,7 +137,8 @@ $user = currentUser();
   $tabsList = $isAdmin ? ['Mes informations'] : ['Mes commandes', 'Mes informations'];
   ?>
   <div class="tabs">
-    <div style="display:flex;border-bottom:2px solid var(--clr-border);margin-bottom:2rem">
+    <div style="display:flex;border-bottom:2px solid var(--clr-border);margin-bottom:2rem;overflow-x:auto;white-space:nowrap;scrollbar-width:none">
+      <style>.tabs div::-webkit-scrollbar { display: none; }</style>
       <?php foreach($tabsList as $i=>$tab): ?>
       <button class="tab-btn <?= $i===0?'active':'' ?>"><?= $tab ?></button>
       <?php endforeach; ?>
@@ -188,7 +196,7 @@ $user = currentUser();
 
 <?php else: ?>
   <!-- LOGIN / REGISTER -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
+  <div class="grid-responsive-2" style="grid-template-columns:1fr 1fr;gap:2rem">
 
     <!-- Connexion -->
     <div class="card">

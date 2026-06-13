@@ -4,16 +4,16 @@ $pageDesc  = 'Votre panier Vitanova. Vérifiez vos articles et passez à la comm
 require_once 'includes/header.php';
 ?>
 
-<div class="page-header">
+<div class="page-header" style="text-align:center">
   <div class="container">
-    <h1>Mon Panier</h1>
+    <h1 style="font-size:clamp(1.5rem,5vw,2.2rem)">Mon Panier</h1>
     <p style="margin-top:.5rem;color:var(--clr-muted)">Vérifiez vos articles et passez à la commande.</p>
   </div>
 </div>
 
-<section class="section-sm" style="background:#fff">
+<section class="section" style="background:var(--clr-bg)">
   <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start">
+    <div id="cart-content-wrapper" class="grid-responsive-2" style="grid-template-columns:1fr 360px;align-items:start">
       <div id="cart-items">
         <!-- Rendered by cart.js -->
         <div style="text-align:center;padding:4rem 1rem;color:var(--clr-muted)">
@@ -50,10 +50,16 @@ require_once 'includes/header.php';
 .shipping-note { font-size:.78rem; color:var(--clr-accent); margin-top:.25rem; }
 .payment-badge { display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:var(--clr-muted); padding:.75rem; background:var(--clr-bg); border:1px solid var(--clr-border); border-radius:var(--radius-sm); margin:1rem 0; }
 .text-success { color:var(--clr-success); }
+/* Handle empty cart centering */
+#cart-items:only-child, .cart-empty { grid-column: 1 / -1; width: 100%; max-width: 600px; margin: 0 auto; }
+#cart-content-wrapper:has(.cart-empty) { grid-template-columns: 1fr !important; }
+
+@media(max-width:992px) {
+  #main-content .container > .grid-responsive-2 { grid-template-columns: 1fr !important; }
+  .order-summary { position: static; }
+}
 @media(max-width:768px) {
-  .cart-item { grid-template-columns:60px 1fr; gap:.75rem; }
-  .cart-item__subtotal, .cart-item__remove { grid-column:2; }
-  #main-content .container > div { grid-template-columns:1fr; }
+  .cart-item { grid-template-columns: 1fr !important; }
 }
 </style>
 
